@@ -1,0 +1,117 @@
+﻿@using Barcode_Reports_Task.ViewModels
+@model ReportViewModel
+
+@{
+    ViewData["Title"] = "Create New Report";
+}
+
+<div class="container-xxl py-5">
+    <div class="glass-card bg-white rounded-4 shadow-3d">
+        <div class="card-header bg-transparent py-4 border-0">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-file-alt fa-2x text-primary me-3"></i>
+                <h1 class="h3 mb-0">Create New Report</h1>
+            </div>
+        </div>
+        <div class="card-body px-5">
+            <form asp-controller="Report" asp-action="Save" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <div class="form-floating mb-4">
+                    <input asp-for="Title" class="form-control form-control-lg border-300"
+                           placeholder=" " required />
+                    <label asp-for="Title" class="ms-2 text-500">Title</label>
+                    <span asp-validation-for="Title" class="invalid-feedback small"></span>
+                </div>
+
+                <div class="form-floating mb-4">
+                    <textarea asp-for="Description" class="form-control border-300"
+                              placeholder=" " style="height: 120px" required></textarea>
+                    <label asp-for="Description" class="ms-2 text-500">Description</label>
+                    <span asp-validation-for="Description" class="invalid-feedback small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-500 mb-3">Upload Image</label>
+                    <div class="file-upload-wrapper">
+                        <input asp-for="Image" type="file" class="form-control visually-hidden"
+                               id="customFile" required accept="image/*">
+                        <div class="row align-items-center g-4">
+                            <div class="col-md-6">
+                                <label for="customFile" class="file-upload-label bg-soft-primary">
+                                    <div class="file-upload-design">
+                                        <i class="fas fa-cloud-upload-alt fa-2x text-primary mb-3"></i>
+                                        <p class="mb-1">Drag & Drop or Click to Upload</p>
+                                        <span class="text-400">PNG, JPG up to 5MB</span>
+                                    </div>
+                                    <span class="file-selected"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="image-preview-container text-center" style="display: none;">
+                                    <div class="position-relative d-inline-block">
+                                        <img id="imagePreview" src="#" alt="Image Preview"
+                                             class="img-fluid rounded-3 shadow-sm"
+                                             style="max-height: 200px; object-fit: contain;">
+                                        <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1"
+                                                onclick="clearImage()" title="Remove image">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <p class="text-muted small mt-2">Image Preview</p>
+                                </div>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Image" class="invalid-feedback small"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-3 pt-4">
+                    <button type="submit" class="btn btn-primary px-5 py-3 rounded-pill">
+                        <span class="submit-text">Create Report</span>
+                        <div class="spinner-border spinner-border-sm text-light d-none"
+                             role="status"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        document.getElementById('customFile').addEventListener('change', function(e) {
+            const label = document.querySelector('.file-selected');
+            const previewContainer = document.querySelector('.image-preview-container');
+            const previewImage = document.getElementById('imagePreview');
+
+            if(this.files && this.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                }
+
+                reader.readAsDataURL(this.files[0]);
+                label.textContent = this.files[0].name + ' selected';
+            }
+        });
+
+
+        function clearImage() {
+            const input = document.getElementById('customFile');
+            const previewContainer = document.querySelector('.image-preview-container');
+            const previewImage = document.getElementById('imagePreview');
+
+            input.value = '';
+            previewImage.src = '#';
+            previewContainer.style.display = 'none';
+            document.querySelector('.file-selected').textContent = '';
+        }
+
+    </script>
+}

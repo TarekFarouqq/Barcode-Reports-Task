@@ -13,7 +13,7 @@ namespace Barcode_Reports_Task.Models
         [StringLength(255)]
         public string Title { get; set; }
         [Required]
-        [MaxLength(300)]
+        [MaxLength(500)]
         public string Description { get; set; }
 
         [Required]
