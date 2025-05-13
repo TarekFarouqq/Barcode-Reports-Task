@@ -8,7 +8,7 @@ namespace Barcode_Reports_Task.ViewModels
         [StringLength(255, ErrorMessage = "Title cannot exceed 255 characters")]
         public string Title { get; set; }
         [Required(ErrorMessage = "Description is required")]
-        [MaxLength(500, ErrorMessage = "Description cannot exceed 300 characters")]
+        [MaxLength(2000, ErrorMessage = "Description cannot exceed 300 characters")]
         public string Description { get; set; }
 
         [Required]
