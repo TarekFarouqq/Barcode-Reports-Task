@@ -4,6 +4,7 @@ using Barcode_Reports_Task.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Barcode_Reports_Task.Migrations
 {
     [DbContext(typeof(BarcodeDBContext))]
-    partial class BarcodeDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250513173638_IncreaseTheCharsOfDescription")]
+    partial class IncreaseTheCharsOfDescription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
