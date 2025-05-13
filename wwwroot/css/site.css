@@ -18,7 +18,8 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -122,4 +123,9 @@ body {
     padding: 0.25rem 0.5rem;
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.field-validation-error {
+    color: red !important;
+   
 }
