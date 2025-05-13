@@ -14,32 +14,57 @@ namespace Barcode_Reports_Task.Services
             _env = env;
         }
 
-        public async Task<int> SaveReportAsync(Report report, IFormFile file)
+        public async Task<IEnumerable<Report>> GetAllReportsAsync()
         {
-            report.ImagePath = await SaveFileAsync(file);
-            await _unitOfWork.Reports.AddAsync(report);
-            await _unitOfWork.CompleteAsync();
-            return report.Id;
+            return await _unitOfWork.Reports.GetAllAsync();
         }
 
-        private async Task<string> SaveFileAsync(IFormFile file)
+        public async Task<Report> GetReportByIdAsync(int id)
         {
-            var uploadFolder = Path.Combine(_env.WebRootPath, "images", "reports");
-            if (!Directory.Exists(uploadFolder))
-                Directory.CreateDirectory(uploadFolder);
-
-            var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var filePath = Path.Combine(uploadFolder, uniqueFileName);
-
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await file.CopyToAsync(stream);
-
-            return $"/images/reports/{uniqueFileName}";
+            if (id <= 0) throw new ArgumentException("Invalid report ID", nameof(id));
+            var report = await _unitOfWork.Reports.GetByIdAsync(id);
+            if (report == null) throw new InvalidOperationException($"Report with ID {id} not found.");
+            return report;
         }
-
         public async Task<Report?> GetLatestReportAsync()
         {
             return await _unitOfWork.Reports.GetLatestAsync();
         }
+
+
+        public async Task SaveReportAsync(Report report, IFormFile file)
+        {
+            var uploadsFolder = Path.Combine(_env.WebRootPath, "ReportsImage");
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            report.ImagePath = "/ReportsImage/" + fileName;
+            await _unitOfWork.Reports.AddAsync(report);
+            await _unitOfWork.CompleteAsync();
+        }
+
+        //private async Task<string> SaveFileAsync(IFormFile file)
+        //{
+        //    var uploadFolder = Path.Combine(_env.WebRootPath, "images", "reports");
+        //    if (!Directory.Exists(uploadFolder))
+        //        Directory.CreateDirectory(uploadFolder);
+
+        //    var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+        //    var filePath = Path.Combine(uploadFolder, uniqueFileName);
+
+        //    using var stream = new FileStream(filePath, FileMode.Create);
+        //    await file.CopyToAsync(stream);
+
+        //    return $"/images/reports/{uniqueFileName}";
+        //}
+      
     }
 }

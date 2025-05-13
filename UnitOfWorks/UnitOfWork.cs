@@ -15,9 +15,9 @@ namespace Barcode_Reports_Task.UnitOfWorks
             Reports = new ReportRepo(_context);
         }
 
-        public async Task CompleteAsync()
+        public async Task<int> CompleteAsync()
         {
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
     }
 }

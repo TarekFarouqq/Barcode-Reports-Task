@@ -4,7 +4,9 @@ namespace Barcode_Reports_Task.Interfaces
 {
     public interface IReportService
     {
-        Task<int> SaveReportAsync(Report report, IFormFile file);
+        Task SaveReportAsync(Report report, IFormFile file);
         Task<Report?> GetLatestReportAsync();
+        Task<IEnumerable<Report>> GetAllReportsAsync();
+        Task<Report> GetReportByIdAsync(int id);
     }
 }
